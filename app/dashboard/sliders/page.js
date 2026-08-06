@@ -1,6 +1,9 @@
 import prisma from '@/lib/prisma';
 import SlidersManager from '@/components/dashboard/SlidersManager';
 
+export const dynamic = 'force-dynamic';
+
+
 async function getSliders() {
     try {
         return await prisma.slider.findMany({ orderBy: { order: 'asc' } });

@@ -1,6 +1,9 @@
 import prisma from '@/lib/prisma';
 import OrdersTable from '@/components/dashboard/OrdersTable';
 
+export const dynamic = 'force-dynamic';
+
+
 async function getOrders() {
     try {
         return await prisma.order.findMany({

@@ -6,6 +6,8 @@ import DailySalesChart from '@/components/dashboard/DailySalesChart';
 import MonthlySalesChart from '@/components/dashboard/MonthlySalesChart';
 import TopCategories from '@/components/dashboard/TopCategories';
 
+export const dynamic = 'force-dynamic';
+
 async function getOrders() {
     try {
         return await prisma.order.findMany({
