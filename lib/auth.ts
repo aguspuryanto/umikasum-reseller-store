@@ -38,12 +38,14 @@ export const authOptions: AuthOptions = {
                     return null;
                 }
 
+                // Cast to any because NextAuth's User type includes DB fields
+                // (password, createdAt, updatedAt) we don't want in the JWT
                 return {
                     id: user.id,
                     email: user.email,
                     name: user.name,
                     role: user.role,
-                };
+                } as any;
             },
         }),
     ],
