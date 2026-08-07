@@ -1,5 +1,4 @@
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
+import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/auth';
@@ -12,34 +11,19 @@ export async function POST(request: Request) {
         }
 
         const formData = await request.formData();
-        const file = formData.get('file');
+        const file = formData.get('file') as File | null;
 
         if (!file) {
             return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
         }
 
-        // @ts-ignore
-        const bytes: ArrayBuffer = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
+        const blob = await put(`umikasum/${Date.now()}-${file.name}`, file, {
+            access: 'public',
+        });
 
-        const timestamp = Date.now();
-        // @ts-ignore
-        const filename = `${timestamp}-${file.name}`;
-        const uploadDir = join(process.cwd(), 'public/uploads');
-
-        try {
-            await mkdir(uploadDir, { recursive: true });
-        } catch (err) {
-            // Directory already exists
-        }
-
-        const path = join(uploadDir, filename);
-        await writeFile(path, buffer);
-
-        const imageUrl = `/uploads/${filename}`;
-        return NextResponse.json({ url: imageUrl });
+        return NextResponse.json({ url: blob.url });
     } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error';
         return NextResponse.json({ error: message }, { status: 500 });
     }
-}
+}
