@@ -41,6 +41,7 @@ model Product {
   sellPrice   Float
   buyPrice    Float
   image       String?
+  description String?
   category    String?
   stock       Int      @default(0)
   userId      String

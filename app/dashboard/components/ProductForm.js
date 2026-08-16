@@ -10,7 +10,8 @@ const EMPTY_FORM = {
     buyPrice: '',
     image: '',
     category: '',
-    stock: 0
+    stock: 0,
+    description: ''
 };
 
 export default function ProductForm({ onProductAdded, editingProduct, onProductEdited, onCancelEdit, onClose }) {
@@ -32,7 +33,8 @@ export default function ProductForm({ onProductAdded, editingProduct, onProductE
                     buyPrice: editingProduct.buyPrice,
                     image: editingProduct.image || '',
                     category: editingProduct.category || '',
-                    stock: editingProduct.stock || 0
+                    stock: editingProduct.stock || 0,
+                    description: editingProduct.description || ''
                 }
                 : EMPTY_FORM
         );
@@ -212,6 +214,19 @@ export default function ProductForm({ onProductAdded, editingProduct, onProductE
                             />
                         </div>
                     )}
+                </div>
+
+                <div>
+                    <label className="label-dark">Deskripsi</label>
+                    <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        placeholder="Deskripsi produk (opsional)..."
+                        rows={4}
+                        className="input-dark"
+                        style={{ resize: 'vertical', minHeight: '90px' }}
+                    />
                 </div>
 
                 <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
