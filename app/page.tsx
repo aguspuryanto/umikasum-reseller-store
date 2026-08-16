@@ -4,6 +4,8 @@ import HeroSlider from "@/components/HeroSlider";
 import prisma from "@/lib/prisma";
 import type { Prisma, Product, Slider } from "@/app/generated/prisma/client";
 
+export const dynamic = 'force-dynamic';
+
 async function getSliders(): Promise<Slider[]> {
   try {
     return await prisma.slider.findMany({
@@ -79,47 +81,72 @@ export default async function Home({
   ]);
 
   return (
-    <main style={{ minHeight: '100vh', paddingTop: '64px' }}>
+    <main style={{ minHeight: '100vh', paddingTop: '92px' }}>
       {/* Hero Slider (full width) */}
       <HeroSlider slides={sliders} />
 
-      {/* Stats Bar */}
+      {/* Quick Action Categories */}
       <section style={{ background: '#ffffff', borderBottom: '1px solid #eef0f5' }}>
         <div
-          className="animate-fade-in"
           style={{
             maxWidth: '1280px',
             margin: '0 auto',
-            padding: '20px 24px',
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 'clamp(24px, 6vw, 48px)',
+            padding: '16px 24px',
+            overflowX: 'auto',
+            scrollbarWidth: 'none',
           }}
         >
-          <div style={{ textAlign: 'center' }}>
-            <div className="gradient-text" style={{ fontWeight: 800, fontSize: '1.5rem' }}>
-              {products.length}
-            </div>
-            <div style={{ fontSize: '0.72rem', color: '#8a8fa3', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Produk
-            </div>
-          </div>
-          <div style={{ width: '1px', background: '#eef0f5' }} />
-          <div style={{ textAlign: 'center' }}>
-            <div className="gradient-text" style={{ fontWeight: 800, fontSize: '1.5rem' }}>100%</div>
-            <div style={{ fontSize: '0.72rem', color: '#8a8fa3', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Original
-            </div>
-          </div>
-          <div style={{ width: '1px', background: '#eef0f5' }} />
-          <div style={{ textAlign: 'center' }}>
-            <div className="gradient-text" style={{ fontWeight: 800, fontSize: '1.5rem' }}>Fast</div>
-            <div style={{ fontSize: '0.72rem', color: '#8a8fa3', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Pengiriman
-            </div>
+          <style>{`
+            .cat-scroll::-webkit-scrollbar { display: none; }
+            .cat-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; text-decoration: none; flex-shrink: 0; }
+            .cat-icon { width: 64px; height: 64px; border-radius: 50%; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 28px; transition: transform 0.18s, box-shadow 0.18s; border: 2px solid transparent; }
+            .cat-item:hover .cat-icon { transform: translateY(-3px) scale(1.07); box-shadow: 0 6px 18px rgba(232,25,44,0.15); border-color: rgba(232,25,44,0.25); }
+            .cat-label { font-size: 0.72rem; font-weight: 600; color: #383c4a; text-align: center; max-width: 64px; line-height: 1.3; }
+            .cat-badge { position: absolute; top: -2px; left: -2px; background: #e8192c; color: #fff; font-size: 0.55rem; font-weight: 800; padding: 2px 5px; border-radius: 4px; letter-spacing: 0.02em; white-space: nowrap; }
+          `}</style>
+          <div
+            className="cat-scroll"
+            style={{
+              display: 'flex',
+              gap: '8px',
+              overflowX: 'auto',
+              scrollbarWidth: 'none',
+              paddingBottom: '4px',
+              alignItems: 'flex-start',
+            }}
+          >
+            {[
+              { emoji: '🍱', label: 'Food & Minuman', cat: 'Food & Beverage', badge: 'HOT!' },
+              { emoji: '🛍️', label: 'Hampers', cat: 'Hampers' },
+              { emoji: '👗', label: 'Fashion', cat: 'Fashion' },
+              { emoji: '💄', label: 'Beauty', cat: 'Beauty' },
+              { emoji: '🛒', label: 'Kebutuhan Pokok', cat: 'Kebutuhan Pokok' },
+              { emoji: '🌿', label: 'Herbal', cat: 'Herbal' },
+              { emoji: '💊', label: 'Supplement', cat: 'Supplement' },
+              { emoji: '🏠', label: 'Perlengkapan Rumah', cat: 'Perlengkapan Rumah' },
+              { emoji: '📚', label: 'Edukasi', cat: 'Edukasi' },
+              { emoji: '✏️', label: 'ATK', cat: 'ATK' },
+              { emoji: '⚽', label: 'Olahraga', cat: 'Olahraga' },
+              { emoji: '🔧', label: 'Otomotif', cat: 'Otomotif' },
+              { emoji: '🎁', label: 'Lainnya', cat: '' },
+            ].map(({ emoji, label, cat, badge }) => (
+              <a
+                key={label}
+                href={cat ? `/?category=${encodeURIComponent(cat)}` : '/'}
+                className="cat-item"
+                style={{ minWidth: '80px', padding: '4px 8px', position: 'relative' }}
+              >
+                <div style={{ position: 'relative' }}>
+                  {badge && <span className="cat-badge">{badge}</span>}
+                  <div className="cat-icon">{emoji}</div>
+                </div>
+                <span className="cat-label">{label}</span>
+              </a>
+            ))}
           </div>
         </div>
       </section>
+
 
       {/* Products Grid */}
       <section style={{ maxWidth: '1280px', margin: '0 auto', padding: '32px 24px 80px' }}>
@@ -268,3 +295,4 @@ export default async function Home({
     </main>
   );
 }
+

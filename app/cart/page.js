@@ -15,7 +15,7 @@ export default function CartPage() {
     const { items, updateQuantity, removeItem, totalPrice, totalItems } = useCart();
 
     return (
-        <main style={{ minHeight: '100vh', paddingTop: '64px' }}>
+        <main style={{ minHeight: '100vh', paddingTop: '92px' }}>
             <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 24px 80px' }}>
                 <h1 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '8px', color: '#14161f' }}>
                     Keranjang Belanja
@@ -132,3 +132,4 @@ export default function CartPage() {
         </main>
     );
 }
+

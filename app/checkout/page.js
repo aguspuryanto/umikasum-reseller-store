@@ -57,7 +57,7 @@ export default function CheckoutPage() {
 
     if (order) {
         return (
-            <main style={{ minHeight: '100vh', paddingTop: '64px' }}>
+            <main style={{ minHeight: '100vh', paddingTop: '92px' }}>
                 <div style={{ maxWidth: '520px', margin: '0 auto', padding: '64px 24px' }}>
                     <div className="card animate-fade-in" style={{ padding: '40px 32px', textAlign: 'center' }}>
                         <div style={{ fontSize: '3rem', marginBottom: '16px' }}>✅</div>
@@ -88,7 +88,7 @@ export default function CheckoutPage() {
 
     if (items.length === 0) {
         return (
-            <main style={{ minHeight: '100vh', paddingTop: '64px' }}>
+            <main style={{ minHeight: '100vh', paddingTop: '92px' }}>
                 <div style={{ maxWidth: '520px', margin: '0 auto', padding: '64px 24px', textAlign: 'center' }}>
                     <div className="card" style={{ padding: '48px 24px' }}>
                         <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🛒</div>
@@ -103,7 +103,7 @@ export default function CheckoutPage() {
     }
 
     return (
-        <main style={{ minHeight: '100vh', paddingTop: '64px' }}>
+        <main style={{ minHeight: '100vh', paddingTop: '92px' }}>
             <div style={{ maxWidth: '900px', margin: '0 auto', padding: '40px 24px 80px' }}>
                 <h1 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '32px', color: '#14161f' }}>
                     Checkout
@@ -222,3 +222,4 @@ export default function CheckoutPage() {
         </main>
     );
 }
+

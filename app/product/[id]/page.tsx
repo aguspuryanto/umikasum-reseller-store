@@ -6,6 +6,8 @@ import AddToCartSection from "@/components/AddToCartSection";
 import { WishlistButton, ShareButtons, ProductReviews, DescriptionCollapse } from "@/components/ProductDetailClient";
 import type { Product } from "@/app/generated/prisma/client";
 
+export const dynamic = 'force-dynamic';
+
 async function getProduct(id: string) {
   try {
     return await prisma.product.findUnique({ where: { id } });
@@ -52,7 +54,7 @@ export default async function ProductDetailPage({
   const productUrl = `${BASE_URL}/product/${product.id}`;
 
   return (
-    <main style={{ minHeight: '100vh', paddingTop: '64px' }}>
+    <main style={{ minHeight: '100vh', paddingTop: '92px' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '32px 24px 80px' }}>
         {/* Breadcrumb */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#8a8fa3', marginBottom: '24px' }}>
