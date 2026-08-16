@@ -17,32 +17,25 @@ const EMPTY_FORM = {
 export default function ProductForm({ onProductAdded, editingProduct, onProductEdited, onCancelEdit, onClose }) {
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [loading, setLoading] = useState(false);
-    const [prevEditingProduct, setPrevEditingProduct] = useState(editingProduct);
     const formRef = useRef(null);
     const isEditing = Boolean(editingProduct);
 
-    // Sync form fields whenever a different product is selected for editing (or edit is cancelled).
-    if (editingProduct !== prevEditingProduct) {
-        setPrevEditingProduct(editingProduct);
-        setFormData(
-            editingProduct
-                ? {
-                    no: editingProduct.no,
-                    name: editingProduct.name,
-                    sellPrice: editingProduct.sellPrice,
-                    buyPrice: editingProduct.buyPrice,
-                    image: editingProduct.image || '',
-                    category: editingProduct.category || '',
-                    stock: editingProduct.stock || 0,
-                    description: editingProduct.description || ''
-                }
-                : EMPTY_FORM
-        );
-    }
-
+    // Sync form fields whenever editingProduct changes (opened for edit or reset to add).
     useEffect(() => {
         if (editingProduct) {
+            setFormData({
+                no: editingProduct.no,
+                name: editingProduct.name,
+                sellPrice: editingProduct.sellPrice,
+                buyPrice: editingProduct.buyPrice,
+                image: editingProduct.image || '',
+                category: editingProduct.category || '',
+                stock: editingProduct.stock || 0,
+                description: editingProduct.description || '',
+            });
             formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            setFormData(EMPTY_FORM);
         }
     }, [editingProduct]);
 
