@@ -13,7 +13,7 @@ const EMPTY_FORM = {
     stock: 0
 };
 
-export default function ProductForm({ onProductAdded, editingProduct, onProductEdited, onCancelEdit }) {
+export default function ProductForm({ onProductAdded, editingProduct, onProductEdited, onCancelEdit, onClose }) {
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [loading, setLoading] = useState(false);
     const [prevEditingProduct, setPrevEditingProduct] = useState(editingProduct);
@@ -127,31 +127,55 @@ export default function ProductForm({ onProductAdded, editingProduct, onProductE
                     background: 'rgba(99,102,241,0.04)',
                     display: 'flex',
                     alignItems: 'center',
+                    justifyContent: 'space-between',
                     gap: '12px',
                 }}
             >
-                <div
-                    style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '8px',
-                        background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '14px',
-                    }}
-                >
-                    {isEditing ? '✏️' : '➕'}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div
+                        style={{
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '8px',
+                            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '14px',
+                        }}
+                    >
+                        {isEditing ? '✏️' : '➕'}
+                    </div>
+                    <div>
+                        <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#14161f', margin: 0 }}>
+                            {isEditing ? 'Edit Produk' : 'Tambah Produk'}
+                        </h2>
+                        <p style={{ fontSize: '0.75rem', color: '#8a8fa3', margin: 0 }}>
+                            {isEditing ? `Mengubah "${editingProduct.name}"` : 'Isi detail produk baru'}
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <h2 style={{ fontWeight: 700, fontSize: '1rem', color: '#14161f', margin: 0 }}>
-                        {isEditing ? 'Edit Produk' : 'Tambah Produk'}
-                    </h2>
-                    <p style={{ fontSize: '0.75rem', color: '#8a8fa3', margin: 0 }}>
-                        {isEditing ? `Mengubah "${editingProduct.name}"` : 'Isi detail produk baru'}
-                    </p>
-                </div>
+                {onClose && (
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        aria-label="Tutup"
+                        style={{
+                            width: '28px',
+                            height: '28px',
+                            borderRadius: '8px',
+                            border: '1px solid #e7e8ee',
+                            background: '#ffffff',
+                            color: '#5b6072',
+                            fontSize: '0.9rem',
+                            lineHeight: 1,
+                            cursor: 'pointer',
+                            flexShrink: 0,
+                        }}
+                    >
+                        ✕
+                    </button>
+                )}
             </div>
 
             {/* Form */}

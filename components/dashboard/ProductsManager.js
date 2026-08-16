@@ -4,12 +4,29 @@ import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ProductForm from '@/app/dashboard/components/ProductForm';
 import ProductTable from '@/app/dashboard/components/ProductTable';
+import Modal from '@/app/dashboard/components/Modal';
 
 export default function ProductsManager({ initialProducts }) {
     const [products, setProducts] = useState(initialProducts);
     const [editingProduct, setEditingProduct] = useState(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
     const searchParams = useSearchParams();
     const query = (searchParams.get('q') || '').toLowerCase();
+
+    const closeForm = () => {
+        setIsFormOpen(false);
+        setEditingProduct(null);
+    };
+
+    const openAddForm = () => {
+        setEditingProduct(null);
+        setIsFormOpen(true);
+    };
+
+    const openEditForm = (product) => {
+        setEditingProduct(product);
+        setIsFormOpen(true);
+    };
 
     const fetchProducts = async () => {
         try {
@@ -34,11 +51,26 @@ export default function ProductsManager({ initialProducts }) {
 
     return (
         <div>
-            <div className="animate-fade-in" style={{ marginBottom: '24px' }}>
-                <h1 style={{ fontSize: 'clamp(1.4rem, 3vw, 1.75rem)', fontWeight: 800, letterSpacing: '-0.02em', color: '#14161f', marginBottom: '4px' }}>
-                    Produk
-                </h1>
-                <p style={{ color: '#5b6072', fontSize: '0.875rem' }}>Kelola katalog produk Umi Kasum</p>
+            <div
+                className="animate-fade-in"
+                style={{
+                    marginBottom: '24px',
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    gap: '16px',
+                    flexWrap: 'wrap',
+                }}
+            >
+                <div>
+                    <h1 style={{ fontSize: 'clamp(1.4rem, 3vw, 1.75rem)', fontWeight: 800, letterSpacing: '-0.02em', color: '#14161f', marginBottom: '4px' }}>
+                        Produk
+                    </h1>
+                    <p style={{ color: '#5b6072', fontSize: '0.875rem' }}>Kelola katalog produk Umi Kasum</p>
+                </div>
+                <button type="button" onClick={openAddForm} className="btn-primary" style={{ padding: '10px 18px' }}>
+                    + Tambah Produk
+                </button>
             </div>
 
             <div
@@ -90,38 +122,34 @@ export default function ProductsManager({ initialProducts }) {
                 ))}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '24px' }}>
-                <style>{`
-                    @media (min-width: 1024px) {
-                        .products-grid { grid-template-columns: 340px minmax(0, 1fr) !important; }
-                    }
-                `}</style>
-                <div className="products-grid" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '24px' }}>
-                    <div className="animate-fade-in">
-                        <ProductForm
-                            editingProduct={editingProduct}
-                            onProductAdded={fetchProducts}
-                            onProductEdited={() => {
-                                fetchProducts();
-                                setEditingProduct(null);
-                            }}
-                            onCancelEdit={() => setEditingProduct(null)}
-                        />
-                    </div>
-                    <div className="animate-fade-in">
-                        {query && (
-                            <p style={{ marginBottom: '12px', fontSize: '0.85rem', color: '#5b6072' }}>
-                                Menampilkan hasil untuk &quot;{query}&quot; ({filteredProducts.length} produk)
-                            </p>
-                        )}
-                        <ProductTable
-                            products={filteredProducts}
-                            onProductUpdated={fetchProducts}
-                            onEdit={setEditingProduct}
-                        />
-                    </div>
-                </div>
+            <div className="animate-fade-in">
+                {query && (
+                    <p style={{ marginBottom: '12px', fontSize: '0.85rem', color: '#5b6072' }}>
+                        Menampilkan hasil untuk &quot;{query}&quot; ({filteredProducts.length} produk)
+                    </p>
+                )}
+                <ProductTable
+                    products={filteredProducts}
+                    onProductUpdated={fetchProducts}
+                    onEdit={openEditForm}
+                />
             </div>
+
+            <Modal open={isFormOpen} onClose={closeForm}>
+                <ProductForm
+                    editingProduct={editingProduct}
+                    onClose={closeForm}
+                    onProductAdded={() => {
+                        fetchProducts();
+                        closeForm();
+                    }}
+                    onProductEdited={() => {
+                        fetchProducts();
+                        closeForm();
+                    }}
+                    onCancelEdit={closeForm}
+                />
+            </Modal>
         </div>
     );
 }
