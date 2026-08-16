@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import ProductCard from "@/components/ProductCard";
 import AddToCartSection from "@/components/AddToCartSection";
+import { WishlistButton, ShareButtons, ProductReviews } from "@/components/ProductDetailClient";
 import type { Product } from "@/app/generated/prisma/client";
 
 async function getProduct(id: string) {
@@ -34,6 +35,8 @@ const formatRupiah = (amount: number) =>
     maximumFractionDigits: 0,
   }).format(amount);
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://umikasum.vercel.app';
+
 export default async function ProductDetailPage({
   params,
 }: {
@@ -46,6 +49,7 @@ export default async function ProductDetailPage({
 
   const related = await getRelated(product.category, product.id);
   const stock = product.stock ?? 0;
+  const productUrl = `${BASE_URL}/product/${product.id}`;
 
   return (
     <main style={{ minHeight: '100vh', paddingTop: '64px' }}>
@@ -130,7 +134,7 @@ export default async function ProductDetailPage({
                 {formatRupiah(product.sellPrice)}
               </div>
 
-              <div style={{ marginBottom: '28px' }}>
+              <div style={{ marginBottom: '20px' }}>
                 <span
                   className="badge"
                   style={{
@@ -143,12 +147,43 @@ export default async function ProductDetailPage({
                 </span>
               </div>
 
+              {/* Description */}
+              {(product as any).description && (
+                <div style={{ marginBottom: '20px' }}>
+                  <p style={{
+                    fontSize: '0.9rem',
+                    color: '#5b6072',
+                    lineHeight: 1.75,
+                    margin: 0,
+                    whiteSpace: 'pre-wrap',
+                  }}>
+                    {(product as any).description}
+                  </p>
+                </div>
+              )}
+
               <div style={{ borderTop: '1px solid #eef0f5', paddingTop: '24px' }}>
                 <AddToCartSection product={product} />
+              </div>
+
+              {/* Wishlist + Share */}
+              <div style={{
+                borderTop: '1px solid #eef0f5',
+                paddingTop: '18px',
+                marginTop: '18px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+              }}>
+                <WishlistButton productId={product.id} productName={product.name} />
+                <ShareButtons productName={product.name} productUrl={productUrl} />
               </div>
             </div>
           </div>
         </div>
+
+        {/* Reviews */}
+        <ProductReviews productId={product.id} />
 
         {/* Related products */}
         {related.length > 0 && (

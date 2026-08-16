@@ -95,7 +95,6 @@ export default function ProductForm({ onProductAdded, editingProduct, onProductE
     };
 
     const fields = [
-        { label: 'Nomor Produk', name: 'no', type: 'number', placeholder: 'e.g. 1' },
         { label: 'Nama Produk', name: 'name', type: 'text', placeholder: 'Nama produk...' },
         { label: 'Harga Jual', name: 'sellPrice', type: 'number', placeholder: '0' },
         { label: 'Harga Beli', name: 'buyPrice', type: 'number', placeholder: '0' },
@@ -175,6 +174,7 @@ export default function ProductForm({ onProductAdded, editingProduct, onProductE
 
             {/* Form */}
             <form onSubmit={handleSubmit} style={{ padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <input type="hidden" name="no" value={formData.no} />
                 {fields.map(field => (
                     <div key={field.name}>
                         <label className="label-dark">{field.label}</label>
@@ -183,7 +183,7 @@ export default function ProductForm({ onProductAdded, editingProduct, onProductE
                             name={field.name}
                             value={formData[field.name]}
                             onChange={handleChange}
-                            required={['no','name','sellPrice','buyPrice'].includes(field.name)}
+                            required={['name','sellPrice','buyPrice'].includes(field.name)}
                             placeholder={field.placeholder}
                             className="input-dark"
                         />
