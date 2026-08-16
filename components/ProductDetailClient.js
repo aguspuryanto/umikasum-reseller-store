@@ -1,6 +1,66 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+/* ─── DESCRIPTION COLLAPSE ────────────────────────────────── */
+const COLLAPSED_LINES = 4;
+
+export function DescriptionCollapse({ text }) {
+    const [expanded, setExpanded] = useState(false);
+    const [needsClamp, setNeedsClamp] = useState(false);
+    const ref = useRef(null);
+
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        // Check if content is taller than the clamped height
+        const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 24;
+        const clampedH = lineHeight * COLLAPSED_LINES;
+        setNeedsClamp(el.scrollHeight > clampedH + 2);
+    }, [text]);
+
+    return (
+        <div style={{ marginBottom: '20px' }}>
+            <p
+                ref={ref}
+                style={{
+                    fontSize: '0.9rem',
+                    color: '#5b6072',
+                    lineHeight: 1.75,
+                    margin: 0,
+                    whiteSpace: 'pre-wrap',
+                    overflow: 'hidden',
+                    display: '-webkit-box',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: expanded ? 'unset' : COLLAPSED_LINES,
+                    transition: 'all 0.3s ease',
+                }}
+            >
+                {text}
+            </p>
+            {needsClamp && (
+                <button
+                    onClick={() => setExpanded(e => !e)}
+                    style={{
+                        marginTop: '6px',
+                        background: 'none',
+                        border: 'none',
+                        padding: 0,
+                        color: '#6366f1',
+                        fontWeight: 600,
+                        fontSize: '0.85rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                    }}
+                >
+                    {expanded ? 'Sembunyikan ▲' : 'Selengkapnya ▼'}
+                </button>
+            )}
+        </div>
+    );
+}
 
 /* ─── WISHLIST BUTTON ─────────────────────────────────────── */
 export function WishlistButton({ productId, productName }) {

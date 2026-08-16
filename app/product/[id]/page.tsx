@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import ProductCard from "@/components/ProductCard";
 import AddToCartSection from "@/components/AddToCartSection";
-import { WishlistButton, ShareButtons, ProductReviews } from "@/components/ProductDetailClient";
+import { WishlistButton, ShareButtons, ProductReviews, DescriptionCollapse } from "@/components/ProductDetailClient";
 import type { Product } from "@/app/generated/prisma/client";
 
 async function getProduct(id: string) {
@@ -149,17 +149,7 @@ export default async function ProductDetailPage({
 
               {/* Description */}
               {(product as any).description && (
-                <div style={{ marginBottom: '20px' }}>
-                  <p style={{
-                    fontSize: '0.9rem',
-                    color: '#5b6072',
-                    lineHeight: 1.75,
-                    margin: 0,
-                    whiteSpace: 'pre-wrap',
-                  }}>
-                    {(product as any).description}
-                  </p>
-                </div>
+                <DescriptionCollapse text={(product as any).description} />
               )}
 
               <div style={{ borderTop: '1px solid #eef0f5', paddingTop: '24px' }}>
